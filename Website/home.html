@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOB LISTING</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333; margin: 0; padding: 0;">
+
+    <!-- Header -->
+    <header style="background-color: cadetblue;">
+        <div class="logo" style="margin-left: 30px; padding: 1px; font-style: oblique; font-family:cursive;">
+            <h1 style="font-size: 25px;">Ycombinator</h1>
+        </div>
+        <nav>
+            <ul style="list-style-type: none; margin: 0; padding: 0; overflow: hidden; background-color: #333;">
+                <li style="float: left;"><button id="viewJobs" style="display: block; color: white; text-align: center; 
+                    padding: 14px 16px; text-decoration: none; cursor: pointer; background-color: #333;">View All</button></li>
+                <li style="float: left;"><button id="addJob" style="display: block; color: white; text-align: center; 
+                    padding: 14px 16px; text-decoration: none; cursor: pointer; background-color: #333;">Add Job</button></li>
+                <li style="float: left;"><button id="updateJobBtn" style="display: block; color: white; text-align: center; 
+                    padding: 14px 16px; text-decoration: none; cursor: pointer; background-color: #333;">Update Job</button></li>
+                <li style="float: left;"><button id="deleteJobBtn" style="display: block; color: white; text-align: center; 
+                    padding: 14px 16px; text-decoration: none; cursor: pointer; background-color: #333;">Delete Job</button></li>                        
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main content area where jobs will be listed -->
+    <main style="padding: 20px;">
+        <h2 style="text-align: center; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">Job Listings</h2>
+        
+        <!-- Filter Section -->
+        <div id="filterSection" style="margin-bottom: 20px;">
+            <h3>Filter Jobs</h3>
+            <form id="filterForm">
+                <label for="keyword">Keyword:</label>
+                <input type="text" id="keyword" name="keyword" placeholder="Enter keyword" style="margin-right: 10px;">
+                
+                <label for="posted_after">Posted After:</label>
+                <input type="date" id="posted_after" name="posted_after" style="margin-right: 10px;">
+                
+                <button type="submit" style="background-color: #333; color: white; padding: 5px 10px; border: none; cursor: pointer;">
+                    Apply Filters
+                </button>
+            </form>
+        </div>
+
+        <div id="jobsContainer" style="margin-top: 20px;">
+            <!-- Jobs will be displayed here -->
+        </div>
+    </main>
+
+    <!-- Add Job Form -->
+    <div id="addJobForm" style="display: none;">
+        <h2>Add a New Job</h2>
+        <form id="form">
+            <label for="job_title">Job Title:</label>
+            <input type="text" id="job_title" name="job_title" required><br><br>
+            <label for="job_URL">Job URL:</label>
+            <input type="text" id="job_URL" name="job_URL" required><br><br>
+            <label for="company_URL">Company URL:</label>
+            <input type="text" id="company_URL" name="company_URL" required><br><br>
+            <label for="post_date">Post Date:</label>
+            <input type="date" id="post_date" name="post_date" required><br><br>
+            <button type="submit" style="background-color: #333; color: white; padding: 10px 15px; border: none; cursor: pointer;">
+                Add Job
+            </button>
+        </form>
+    </div>
+
+    <!-- Update Job Form -->
+    <div id="updateJobForm" style="display: none;">
+        <h2>Update Job</h2>
+        <form id="updateForm">
+            <label for="update_job_url">Job ID (to update):</label>
+            <input type="text" id="update_job_url" name="update_job_url" required><br><br>
+            <label for="new_job_URL">New Job URL:</label>
+            <input type="text" id="new_job_URL" name="new_job_URL"><br><br>
+            <label for="new_company_URL">New Company URL:</label>
+            <input type="text" id="new_company_URL" name="new_company_URL"><br><br>
+            <label for="new_post_date">New Post Date:</label>
+            <input type="date" id="new_post_date" name="new_post_date"><br><br>
+            <button type="submit" style="background-color: #333; color: white; padding: 10px 15px; border: none; cursor: pointer;">
+                Update Job
+            </button>
+        </form>
+    </div>
+
+    <!-- Delete Job Form -->
+    <div id="deleteJobForm" style="display: none;">
+        <h2>Delete Job</h2>
+        <form id="deleteForm">
+            <label for="delete_job_url">Job ID (to delete):</label>
+            <input type="text" id="delete_job_url" name="delete_job_url" required><br><br>
+            <button type="submit" style="background-color: #333; color: white; padding: 10px 15px; border: none; cursor: pointer;">
+                Delete Job
+            </button>
+        </form>
+    </div>
+
+<!-- JavaScript -->
+<script>
+    document.getElementById('viewJobs').addEventListener('click', function() {
+        // Hide all forms
+        document.getElementById('addJobForm').style.display = 'none';
+        document.getElementById('updateJobForm').style.display = 'none';
+        document.getElementById('deleteJobForm').style.display = 'none';
+
+        // Fetch and display jobs
+        fetchJobs();
+    });
+
+    document.getElementById('addJob').addEventListener('click', function() {
+        // Hide all other sections
+        document.getElementById('jobsContainer').style.display = 'none';
+        document.getElementById('updateJobForm').style.display = 'none';
+        document.getElementById('deleteJobForm').style.display = 'none';
+
+        // Display Add Job form
+        document.getElementById('addJobForm').style.display = 'block';
+    });
+
+    document.getElementById('updateJobBtn').addEventListener('click', function() {
+        // Hide all other sections
+        document.getElementById('jobsContainer').style.display = 'none';
+        document.getElementById('addJobForm').style.display = 'none';
+        document.getElementById('deleteJobForm').style.display = 'none';
+
+        // Display Update Job form
+        document.getElementById('updateJobForm').style.display = 'block';
+    });
+
+    document.getElementById('deleteJobBtn').addEventListener('click', function() {
+        // Hide all other sections
+        document.getElementById('jobsContainer').style.display = 'none';
+        document.getElementById('addJobForm').style.display = 'none';
+        document.getElementById('updateJobForm').style.display = 'none';
+
+        // Display Delete Job form
+        document.getElementById('deleteJobForm').style.display = 'block';
+    });
+
+    document.getElementById('form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const jobData = {
+            job_title: document.getElementById('job_title').value,
+            job_URL: document.getElementById('job_URL').value,
+            company_URL: document.getElementById('company_URL').value,
+            post_date: document.getElementById('post_date').value
+        };
+
+        fetch('http://127.0.0.1:5000/api/jobs', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jobData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('Job added successfully!');
+            document.getElementById('form').reset();
+            document.getElementById('addJobForm').style.display = 'none';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+
+    document.getElementById('updateForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const jobID = document.getElementById('update_job_url').value;
+        const updatedData = {
+            job_URL: document.getElementById('new_job_URL').value,
+            company_URL: document.getElementById('new_company_URL').value,
+            post_date: document.getElementById('new_post_date').value || null
+        };
+
+        fetch(`http://127.0.0.1:5000/api/jobs/${jobID}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('Job updated successfully!');
+            document.getElementById('updateForm').reset();
+            document.getElementById('updateJobForm').style.display = 'none';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+
+    document.getElementById('deleteForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const jobID = document.getElementById('delete_job_url').value;
+
+        fetch(`http://127.0.0.1:5000/api/jobs/${jobID}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Job deleted successfully!');
+                document.getElementById('deleteForm').reset();
+                document.getElementById('deleteJobForm').style.display = 'none';
+            } else {
+                alert('Failed to delete job.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+
+    document.getElementById('filterForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        fetchJobs();
+    });
+
+    function fetchJobs() {
+        const keyword = document.getElementById('keyword').value;
+        const postedAfter = document.getElementById('posted_after').value;
+
+        let apiUrl = 'http://127.0.0.1:5000/api/jobs';
+        const queryParams = [];
+
+        if (keyword) {
+            queryParams.push(`keyword=${encodeURIComponent(keyword)}`);
+        }
+        if (postedAfter) {
+            queryParams.push(`posted_after=${encodeURIComponent(postedAfter)}`);
+        }
+
+        if (queryParams.length > 0) {
+            apiUrl += '?' + queryParams.join('&');
+        }
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(jobs => {
+                const jobsContainer = document.getElementById('jobsContainer');
+                jobsContainer.innerHTML = ''; 
+                jobs.forEach(job => {
+                    const jobDiv = document.createElement('div');
+                    jobDiv.innerHTML = `<strong>${job.job_title}</strong> at <a href="${job.company_URL}">${job.company_URL}</a>
+                                        <br>Job Details: <a href="${job.job_URL}">${job.job_URL}</a>
+                                        <br>Posted on: ${job.post_date}`;
+                    jobsContainer.appendChild(jobDiv);
+                    jobsContainer.appendChild(document.createElement('hr')); 
+                });
+                jobsContainer.style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Failed to fetch jobs:', error);
+                const jobsContainer = document.getElementById('jobsContainer');
+                jobsContainer.innerHTML = 'Failed to load jobs. Please try again later.';
+                jobsContainer.style.display = 'block';
+            });
+    }
+</script>
+</body>
+</html>
