@@ -1,0 +1,15 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      nodejs: latest
+    commands:
+      - echo "No dependencies to install. Proceeding to build phase."
+  build:
+    commands:
+      - echo "Building static website files."
+      - echo "Website ready for deployment."
+artifacts:
+  files:
+    - '**/*'
+  base-directory: 'host'
