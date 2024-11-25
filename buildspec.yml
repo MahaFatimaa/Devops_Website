@@ -1,14 +1,23 @@
 version: 0.2
+
 phases:
   install:
     runtime-versions:
       nodejs: latest
     commands:
-      - echo "No dependencies to install. Proceeding to build phase."
+      - echo "Installing dependencies..."
+      - npm install # Assuming dependencies are needed for running tests
+
+  pre_build:
+    commands:
+      - echo "Running unit tests..."
+      - npm test # This command should be configured to run your unit tests
+
   build:
     commands:
       - echo "Building static website files."
       - echo "Website ready for deployment."
+
 artifacts:
   files:
     - '**/*'
