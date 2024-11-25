@@ -1,20 +1,14 @@
 version: 0.2
-
 phases:
   install:
     runtime-versions:
-      python: 3.8
+      nodejs: latest
     commands:
-      - echo "Installing Python dependencies..."
-      - pip install -r requirements.txt
-  pre_build:
-    commands:
-      - echo "Running unit tests..."
-      - pytest
+      - echo "No dependencies to install. Proceeding to build phase."
   build:
     commands:
-      - echo "Building the Python application."
-      - echo "Application ready for deployment."
+      - echo "Building static website files."
+      - echo "Website ready for deployment."
 artifacts:
   files:
     - '**/*'
