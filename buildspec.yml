@@ -3,21 +3,18 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: latest
+      python: 3.8
     commands:
-      - echo "Installing dependencies..."
-      - npm install # Assuming dependencies are needed for running tests
-
+      - echo "Installing Python dependencies..."
+      - pip install -r requirements.txt
   pre_build:
     commands:
       - echo "Running unit tests..."
-      - npm test # This command should be configured to run your unit tests
-
+      - pytest
   build:
     commands:
-      - echo "Building static website files."
-      - echo "Website ready for deployment."
-
+      - echo "Building the Python application."
+      - echo "Application ready for deployment."
 artifacts:
   files:
     - '**/*'
